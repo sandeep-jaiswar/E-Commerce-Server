@@ -14,9 +14,14 @@ module.exports = {
     name,
     version,
     serviceTimeout: 30,
-    database : {
-      mongo : {
-        dsn : process.env.DEV_DB_DSN
+    database: {
+      mongo: {
+        dsn: process.env.DEV_DB_DSN
+      },
+      redis:{
+        options:{
+          port: 6379
+        }
       }
     },
     log: () => getLogger(name, version, 'debug'),

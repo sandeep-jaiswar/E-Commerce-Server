@@ -9,22 +9,36 @@ passport.use(new GoogleStrategy({
   callbackURL: "/auth/google/callback"
   },
   function(accessToken, refreshToken, profile, done) {
+    console.log(profile);
     const data = {
       name : profile.displayName,
-      email :profile.email[0].value
+      email :profile.emails[0].value
     };
-    User.findOne({email : data.email}).then(existingUser => {
+    User.findOne({ email: data.email }).then(existingUser =>{
       if(existingUser){
-        console.log('existing Google User')
+        console.log("Existing LoggedIn Google User");
+        return done(null,existingUser)
       }
-    })
+      const user = new User(data);
+      user.save().then((user)=>{
+        console.log('Saved New Google User');
+        return done(null,user)
+      }).catch(err => console.log(err))
+    }).catch(err => console.log(err));
   }
 ));
 
 
-passport.serializeUser((user, done) => done(null, user));
+passport.serializeUser((user, done) => done(null, user._id));
 
-passport.deserializeUser((user, done) => done(null, user));
+passport.deserializeUser(async (id, done) => {
+  try{
+    const user= await User.findById(id).exec();
+    return done(null,user);
+  }catch(err){
+    return done(err)
+  }
+});
 
 module.exports = {
   initialize: passport.initialize(),
