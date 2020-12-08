@@ -1,0 +1,24 @@
+#!/usr/bin/env node
+require('dotenv').config();
+const http = require('http');
+
+const config = require('../config')[process.env.NODE_ENV || 'development'];
+
+const log = config.log();
+const db =require('../lib/db')
+const app = require('../app')(config);
+
+const server = http.createServer(app);
+
+db.connect(config.database.mongo.dsn).then(()=>{
+  log.info('DB connected');
+  server.listen(process.env.PORT || 8080);
+}).catch((err)=>{
+  log.fatal(err)
+})
+
+server.on('listening', () => {
+  log.info(
+    `Hi there! I'm listening on port ${server.address().port} in ${app.get('env')} mode.`,
+  );
+});
