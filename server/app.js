@@ -2,6 +2,10 @@ const express = require('express');
 const session = require('express-session');
 const RedisStore = require('connect-redis')(session);
 const app = express();
+const bodyParser = require('body-parser');
+const cors = require('cors');
+app.use(bodyParser.json())
+app.use(express.json());
 
 const auth = require('./lib/auth');
 const routes = require('./routes');
@@ -29,7 +33,12 @@ module.exports = (config) => {
   app.use(auth.initialize);
   app.use(auth.session);
 
-  app.use('/', routes());
+  app.use('/',temp, routes());
+
+  function temp(){
+    console.log('hi');
+    next();
+  }
 
   // eslint-disable-next-line no-unused-vars
   app.use((error, req, res, next) => {

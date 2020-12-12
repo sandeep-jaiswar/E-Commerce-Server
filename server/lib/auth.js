@@ -12,6 +12,8 @@ passport.use(new GoogleStrategy({
     console.log(profile);
     const data = {
       name : profile.displayName,
+      firstName: profile.name['givenName'],
+      lastName: profile.name['familyName'],
       email :profile.emails[0].value
     };
     User.findOne({ email: data.email }).then(existingUser =>{
