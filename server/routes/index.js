@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 const authRoute = require('./auth');
-const userRoute = require('./user');
+const userRoute = require('./users');
+const productRoute =require('./products')
 
 module.exports = () => {
   router.post('/', (req, res, next) => {
@@ -11,7 +12,7 @@ module.exports = () => {
   })
 
   router.use('/auth', authRoute());
-  router.use('/user', userRoute());
-
+  router.use('/user', userRoute);
+  router.use('/product', productRoute);
   return router;
 }

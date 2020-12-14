@@ -1,33 +1,34 @@
 const mongoose = require('mongoose');
+const autoIncrement = require("mongoose-auto-increment");
 const UserSchema = mongoose.Schema({
-    firstName : {
-        type : String,
-        required : true,
-        trim : true
+   
+    email: {
+        type:String,
+        required: true,
+        unique: true
     },
-    lastName : {
-        type : String,
-        required : true,
-        trim : true
+    firstName: {
+        type:String,
+        required: true,
     },
-    email : {
-        type : String,
-        required : true,
-        unique : true,
-        trim : true
+    lastName: {
+        type:String,
+        required: true,
     },
-    password : {
-        type : String,
-        trim : true
+    password: String,
+    userId:{
+        type:Number,
+        unique : true
     },
-    name :{
-        type : String
-    }
-
+    created_date: {type: Date, default: Date.now},
 });
 
-const User =mongoose.model('User',UserSchema);
+autoIncrement.initialize(mongoose.connection);
+UserSchema.plugin(autoIncrement.plugin, {
+  model: "User", // collection or table name in which you want to apply auto increment
+  field: "userId", // field of model which you want to auto increment
+  startAt: 1, // start your auto increment value from 1
+  incrementBy: 1, // incremented by 1
+});
 
-module.exports={
-    User
-}
+module.exports =mongoose.model('User',UserSchema);
