@@ -12,10 +12,10 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-var connectionUrl = "mongodb+srv://SUPERUSER:Sandeep%40123@cluster0.sr1vq.mongodb.net/Test?retryWrites=true&w=majority";
+var connectionUrl = "mongodb+srv://SUPERUSER:Sandeep%40123@cluster0.sr1vq.mongodb.net/test?retryWrites=true&w=majority";
 mongoose.promise = global.promise;
 mongoose.connect(connectionUrl, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then((data) => console.log(data))
+    .then((data) => console.log("connected to DB"))
     .catch((err) => console.log(err));
 app.use(cors());
 app.use(logger('dev'));
