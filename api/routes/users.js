@@ -19,9 +19,9 @@ router.get('/fetchAll',function(req,res,next){
   })
 })
 
-router.post('/fetchByEmail',async function(req,res,next){
+router.post('/verifyUserCred',async function(req,res,next){
   UserModel.aggregate([
-    {$match:{"email":req.body.email}},
+    {$match:{"email":req.body.email,"password":req.body.password}},
     {$project:{"_id":1,"email":1,"firstName":1,"lastName":1,"password":1}}
   ]).exec((err, users) => {
     if (err) next(err);
